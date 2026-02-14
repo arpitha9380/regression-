@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengaluru House Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header">
+        <h1>🇮🇳 Indian Real Estate Predictor</h1>
+        <p>BENGALURU MARKET ANALYSIS</p>
+    </div>
+
+    <div class="container">
+        <form action="/predict" method="post" class="prediction-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <select name="location" id="location" required>
+                        <option value="" disabled {{ 'selected' if not form_data else '' }}>Choose Location</option>
+                        {% for loc in locations %}
+                        <option value="{{ loc }}" {{ 'selected' if form_data and form_data.location==loc else '' }}>{{
+                            loc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="total_sqft">Square Feet (Total Area)</label>
+                    <input type="number" name="total_sqft" id="total_sqft" placeholder="e.g. 1500"
+                        value="{{ form_data.total_sqft if form_data else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bhk">Number of BHK</label>
+                    <input type="number" name="bhk" id="bhk" placeholder="e.g. 2"
+                        value="{{ form_data.bhk if form_data else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bath">Number of Bathrooms</label>
+                    <input type="number" name="bath" id="bath" placeholder="e.g. 2"
+                        value="{{ form_data.bath if form_data else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="balcony">Number of Balconies</label>
+                    <input type="number" name="balcony" id="balcony" placeholder="e.g. 1"
+                        value="{{ form_data.balcony if form_data else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="area_type">Area Type</label>
+                    <select name="area_type" id="area_type" required>
+                        <option value="Super built-up  Area" {{ 'selected' if form_data and
+                            form_data.area_type=='Super built-up  Area' else '' }}>Super built-up Area</option>
+                        <option value="Built-up  Area" {{ 'selected' if form_data and
+                            form_data.area_type=='Built-up  Area' else '' }}>Built-up Area</option>
+                        <option value="Plot  Area" {{ 'selected' if form_data and form_data.area_type=='Plot  Area'
+                            else '' }}>Plot Area</option>
+                        <option value="Carpet  Area" {{ 'selected' if form_data and form_data.area_type=='Carpet  Area'
+                            else '' }}>Carpet Area</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">GET ESTIMATED PRICE</button>
+        </form>
+
+        {% if prediction_text %}
+        <div class="result-card">
+            <h3>{{ prediction_text }}</h3>
+            <p>Prices are estimates based on Bengaluru market trends.</p>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error-card">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Indian Property Insights • ML Powered Prediction</p>
+    </div>
+</body>
+
+</html>
